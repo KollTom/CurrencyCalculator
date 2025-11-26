@@ -12,7 +12,7 @@ import java.time.Instant;
 
 public class AppController {
     private Calculator calculator;
-    private Fetcher fetcher = new Fetcher(Config.API_KEY);
+    private final Fetcher fetcher = new Fetcher(Config.API_KEY);
 
     @FXML
     private Label resultLabel;

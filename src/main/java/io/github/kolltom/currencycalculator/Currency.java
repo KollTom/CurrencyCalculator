@@ -33,6 +33,6 @@ public enum Currency {
     THB, // Thai Baht
     TRY, // Turkish Lira
     USD, // US Dollar
-    ZAR; // South African Rand
+    ZAR // South African Rand
 }
 
