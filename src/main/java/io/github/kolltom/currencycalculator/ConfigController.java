@@ -31,6 +31,7 @@ public class ConfigController {
     @FXML
     protected void onBackButtonClick() {
         saveApiKey(apiKeyField.getText());
+        MainController.getInstance().fetch();
         CurrencyCalculatorApplication.stage.setScene(CurrencyCalculatorApplication.getMainScene());
     }
 
