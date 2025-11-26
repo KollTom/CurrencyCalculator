@@ -10,9 +10,9 @@ import javafx.scene.control.TextFormatter;
 import java.time.Duration;
 import java.time.Instant;
 
-public class AppController {
+public class MainController {
     private Calculator calculator;
-    private Fetcher fetcher = new Fetcher(Config.API_KEY);
+    private final Fetcher fetcher = new Fetcher(CurrencyCalculatorApplication.configController);
 
     @FXML
     private Label resultLabel;
@@ -25,13 +25,6 @@ public class AppController {
 
     @FXML
     public void initialize() {
-        System.out.println("Fetching currency rates...");
-        JsonObject fetchedCurrencyRates = fetcher.fetchCurrencyRates();
-        calculator = new Calculator(
-                new CurrencyRates(fetchedCurrencyRates)
-        );
-        System.out.println("Successfully fetched currency rates!");
-
         currencyBox.getItems().addAll(Currency.values());
         targetCurrencyBox.getItems().addAll(Currency.values());
         currencyBox.setValue(Currency.EUR);
@@ -39,15 +32,37 @@ public class AppController {
         moneyField.setTextFormatter(new TextFormatter<>(change ->
                 change.getText().matches("[0-9.]*") ? change : null
         ));
+        System.out.println("Fetching currency rates...");
+        JsonObject fetchedCurrencyRates = fetcher.fetchCurrencyRates();
+        if (fetchedCurrencyRates == null) {
+            System.out.println("Error fetching currency rates. Check your API Key!");
+        } else {
+            calculator = new Calculator(
+                    new CurrencyRates(fetchedCurrencyRates)
+            );
+            System.out.println("Successfully fetched currency rates!");
+        }
     }
 
     @FXML
     protected void onCalculateButtonClick() {
-        if (Duration.between(calculator.getCurrencyRates().fetchTime(), Instant.now()).toMinutes() >= 1) {
+        if (calculator == null || Duration.between(calculator.getCurrencyRates().fetchTime(), Instant.now()).toMinutes() >= 1) {
             System.out.println("Fetching currency rates...");
-            calculator.setCurrencyRates(
-                    new CurrencyRates(fetcher.fetchCurrencyRates())
-            );
+            JsonObject fetchedCurrencyRates = fetcher.fetchCurrencyRates();
+            if (fetchedCurrencyRates == null) {
+                System.out.println("Error fetching currency rates. Check your API Key!");
+                resultLabel.setText("Error fetching currency rates. Check your API Key!");
+                return;
+            }
+            if (calculator == null) {
+                calculator = new Calculator(
+                        new CurrencyRates(fetchedCurrencyRates)
+                );
+            } else {
+                calculator.setCurrencyRates(
+                        new CurrencyRates(fetchedCurrencyRates)
+                );
+            }
             System.out.println("Successfully updated currency rates!");
         }
 
@@ -66,5 +81,10 @@ public class AppController {
                 .replace("{result}", String.valueOf(result))
                 .replace("{targetCurrency}", targetCurrency.name())
         );
+    }
+
+    @FXML
+    protected void onSettingsButtonClick() {
+        CurrencyCalculatorApplication.stage.setScene(CurrencyCalculatorApplication.getSettingsScene());
     }
 }

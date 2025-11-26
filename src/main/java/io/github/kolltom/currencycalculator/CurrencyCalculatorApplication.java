@@ -8,12 +8,46 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CurrencyCalculatorApplication extends Application {
+    public static ConfigController configController = new ConfigController();
+    public static Stage stage;
+
+    private static Scene mainScene;
+    private static Scene settingsScene;
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CurrencyCalculatorApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+    public void start(Stage stage)  {
+        CurrencyCalculatorApplication.stage = stage;
+        stage.setResizable(false);
         stage.setTitle("Currency Calculator (JavaFX)");
-        stage.setScene(scene);
+
+        if (configController.getApiKey() == null) {
+            stage.setScene(getSettingsScene());
+        } else {
+            stage.setScene(getMainScene());
+        }
         stage.show();
+    }
+
+    public static Scene getMainScene() {
+        if (mainScene == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(CurrencyCalculatorApplication.class.getResource("main-view.fxml"));
+            try {
+                mainScene = new Scene(fxmlLoader.load(), 600, 400);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return mainScene;
+    }
+    public static Scene getSettingsScene() {
+        if (settingsScene == null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(CurrencyCalculatorApplication.class.getResource("settings-view.fxml"));
+            try {
+                settingsScene = new Scene(fxmlLoader.load(), 600, 400);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return settingsScene;
     }
 }
