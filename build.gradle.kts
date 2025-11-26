@@ -14,7 +14,6 @@ repositories {
 }
 
 val junitVersion = "5.12.1"
-val dotEnvVersion = "3.2.0"
 val gsonVersion = "2.13.2"
 
 java {
@@ -41,7 +40,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
-    implementation("io.github.cdimascio:dotenv-java:${dotEnvVersion}")
     implementation("com.google.code.gson:gson:${gsonVersion}")
 }
 

@@ -13,7 +13,7 @@ public class ConfigController {
     @FXML
     private TextField apiKeyField;
 
-    private static final File configFile = new File("config.txt");
+    private static final File configFile = new File("config.json");
 
     @FXML
     public void initialize() {

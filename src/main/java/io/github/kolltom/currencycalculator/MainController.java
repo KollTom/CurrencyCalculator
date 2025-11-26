@@ -46,7 +46,7 @@ public class MainController {
 
     @FXML
     protected void onCalculateButtonClick() {
-        if (calculator == null || Duration.between(calculator.getCurrencyRates().fetchTime(), Instant.now()).toMinutes() >= 1) {
+        if (calculator == null || Duration.between(calculator.getCurrencyRates().fetchTime(), Instant.now()).toMinutes() >= 10) {
             System.out.println("Fetching currency rates...");
             JsonObject fetchedCurrencyRates = fetcher.fetchCurrencyRates();
             if (fetchedCurrencyRates == null) {

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CurrencyCalculatorApplication extends Application {
-    public static ConfigController configController = new ConfigController();
+    public static final ConfigController configController = new ConfigController();
     public static Stage stage;
 
     private static Scene mainScene;
